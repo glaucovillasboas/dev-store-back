@@ -1,0 +1,50 @@
+{
+  "name": "dev-store",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start:prod": "NODE_ENV=prod node ./src/server.js",
+    "start:dev": "NODE_ENV=dev nodemon ./src/server.js",
+    "start:test": "NODE_ENV=test node ./src/server.js",
+    "test": "NODE_ENV=test npx jest",
+    "test:watch": "NODE_ENV=test npx jest --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/glappsmobile/dev-store-back.git"
+  },
+  "author": "Glauco Villas Boas and Victor Durço",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/glappsmobile/dev-store-back/issues"
+  },
+  "homepage": "https://github.com/glappsmobile/dev-store-back#readme",
+  "dependencies": {
+    "@babel/plugin-transform-runtime": "^7.15.8",
+    "@babel/preset-env": "^7.15.8",
+    "babel-jest": "^27.3.1",
+    "bcrypt": "^5.0.1",
+    "cors": "^2.8.5",
+    "dayjs": "^1.10.7",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "faker": "^5.5.3",
+    "jest": "^27.3.1",
+    "joi": "^17.4.2",
+    "jsonwebtoken": "^8.5.1",
+    "nodemon": "^2.0.14",
+    "pg": "^8.7.1"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "8.3.0",
+    "eslint-plugin-import": "^2.25.2",
+    "husky": "^7.0.4",
+    "prettier": "2.4.1",
+    "jest": "^27.3.1",
+    "supertest": "^6.1.6"
+  }
+}
