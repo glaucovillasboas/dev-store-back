@@ -2,9 +2,9 @@ CREATE TABLE "users" (
 	"id" serial NOT NULL,
 	"name" varchar(255) NOT NULL,
 	"email" varchar(255) NOT NULL UNIQUE,
-	"password" varchar(255) NOT NULL,
 	"cpf" varchar(11) NOT NULL UNIQUE,
 	"photo" TEXT,
+	"password" varchar(255) NOT NULL,
 	CONSTRAINT "users_pk" PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
@@ -55,6 +55,7 @@ CREATE TABLE "products" (
 	"price" DECIMAL NOT NULL,
 	"quantity" integer NOT NULL DEFAULT '0',
 	"photo" TEXT NOT NULL,
+	"category_id" integer NOT NULL,
 	CONSTRAINT "products_pk" PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
@@ -100,7 +101,8 @@ CREATE TABLE "orders" (
 
 CREATE TABLE "charts" (
 	"id" serial NOT NULL,
-	"finished" bool NOT NULL DEFAULT 'false',
+	"createdAt" DATE NOT NULL DEFAULT 'now()',
+	"finishedAt" DATE,
 	CONSTRAINT "charts_pk" PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
@@ -119,6 +121,16 @@ CREATE TABLE "sessions" (
 
 
 
+CREATE TABLE "categories" (
+	"id" serial NOT NULL,
+	"name" varchar(255) NOT NULL,
+	CONSTRAINT "categories_pk" PRIMARY KEY ("id")
+) WITH (
+  OIDS=FALSE
+);
+
+
+
 
 ALTER TABLE "addresses" ADD CONSTRAINT "addresses_fk0" FOREIGN KEY ("user_id") REFERENCES "users"("id");
 ALTER TABLE "addresses" ADD CONSTRAINT "addresses_fk1" FOREIGN KEY ("state_id") REFERENCES "states"("id");
@@ -126,6 +138,7 @@ ALTER TABLE "addresses" ADD CONSTRAINT "addresses_fk1" FOREIGN KEY ("state_id") 
 
 ALTER TABLE "phones" ADD CONSTRAINT "phones_fk0" FOREIGN KEY ("user_id") REFERENCES "users"("id");
 
+ALTER TABLE "products" ADD CONSTRAINT "products_fk0" FOREIGN KEY ("category_id") REFERENCES "categories"("id");
 
 ALTER TABLE "aspects" ADD CONSTRAINT "aspects_fk0" FOREIGN KEY ("product_id") REFERENCES "products"("id");
 
