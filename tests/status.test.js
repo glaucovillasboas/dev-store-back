@@ -4,7 +4,7 @@ import app from '../src/app.js';
 
 describe('GET /status', () => {
     test('returns 200 if server is working', async () => {
-        const result = await supertest(app).get('/statusss')
+        const result = await supertest(app).get('/status')
         expect(result.status).toEqual(200);
     });
 });

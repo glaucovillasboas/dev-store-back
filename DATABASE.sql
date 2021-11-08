@@ -2,6 +2,7 @@ CREATE TABLE "users" (
 	"id" serial NOT NULL,
 	"name" varchar(255) NOT NULL,
 	"email" varchar(255) NOT NULL UNIQUE,
+	"password" varchar(255) NOT NULL,
 	"cpf" varchar(11) NOT NULL UNIQUE,
 	"photo" TEXT,
 	CONSTRAINT "users_pk" PRIMARY KEY ("id")
