@@ -11,7 +11,6 @@ CREATE TABLE "users" (
 );
 
 
-
 CREATE TABLE "addresses" (
 	"id" serial NOT NULL,
 	"user_id" integer NOT NULL,

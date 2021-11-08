@@ -1,16 +1,16 @@
 /* eslint import/prefer-default-export: "off" */
-import { signInSchema } from '../../schemas/userSchema.js';
-import { selectFactory } from '../factories/select.factory.js';
+import connection from '../database.js';
 
 async function signIn(req, res) {
-  const validation = signInSchema.validate(req.body);
-  if (validation.error) {
-    return res.sendStatus(400);
-  }
+  const { email } = req.body;
 
-  const query = await selectFactory('users');
+  const user = await connection.query(`
+            SELECT * FROM users WHERE email = $1;
+        `, [email]);
 
-  return res.send(query.rows[0]);
+  console.log(user);
+
+  res.sendStatus(200);
 }
 
 export {

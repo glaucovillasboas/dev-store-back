@@ -1,5 +1,7 @@
+import './setup.js';
 import express from 'express';
 import cors from 'cors';
+import bcrypt from 'bcrypt';
 import { signIn } from './controllers/signIn.js';
 
 const app = express();
