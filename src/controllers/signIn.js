@@ -44,7 +44,7 @@ const signIn = async (req, res) => {
         `, [user.id, token]);
     } else {
       await connection.query(`
-            UPDATE sessions SET token = $1 WHERE userid = $2;
+            UPDATE sessions SET token = $1 WHERE user_id = $2;
         `, [token, user.id]);
     }
 
