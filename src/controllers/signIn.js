@@ -8,15 +8,15 @@ import { signInSchema } from '../../schemas/userSchema.js';
 const signIn = async (req, res) => {
   const { email, password } = req.body;
 
+  const validation = signInSchema.validate(req.body);
+
+  if (validation.error) {
+    return res.sendStatus(400);
+  }
+
   try {
     const userQuery = await connection.query(`
         SELECT * FROM users WHERE email = $1;`, [email]);
-
-    const validation = signInSchema.validate(req.body);
-
-    if (validation.error) {
-      return res.sendStatus(400);
-    }
 
     const user = userQuery.rows[0];
 
