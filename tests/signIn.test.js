@@ -23,6 +23,16 @@ describe('POST /sign-in', () => {
         expect(result.body).toHaveProperty('token');
     });
 
+    test('returns 200 with valid user and password and user is already logged in', async () => {
+        const validUser = await validUserFactory();
+        const result = await supertest(app)
+            .post('/sign-in')
+            .send(validUser);
+        expect(result.status).toEqual(200);
+        expect(result.body).toHaveProperty('token');
+    });
+
+
     test('returns 400 with invalid user', async () => {
         const invalidUser = invalidUserFactory();
         const result = await supertest(app)
