@@ -31,7 +31,7 @@ describe('POST /sign-in', () => {
         expect(result.status).toEqual(400);
     });
 
-    test('returns 401 for Existent user with wrong password', async () => {
+    test('returns 401 with existent user with wrong password', async () => {
         const wrongPasswordUser = await wrongPasswordUserFactory();
         const result = await supertest(app)
             .post('/sign-in')
@@ -39,7 +39,7 @@ describe('POST /sign-in', () => {
         expect(result.status).toEqual(401);
     });
 
-    test('returns 404 for non-existent user', async () => {
+    test('returns 404 with non-existent user', async () => {
         const nonExistentUser = nonExistentUserFactory();
         const result = await supertest(app)
             .post('/sign-in')
