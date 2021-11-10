@@ -19,7 +19,6 @@ const validNewUserFactory = () => {
     password: fakePassword,
     cpf: fakeCpf,
     photo: fakePhoto,
-    // eslint-disable-next-line no-dupe-keys
     phone: fakePhone,
     address: fakeAddress,
     cep: '12345-678',
@@ -41,7 +40,6 @@ const invalidNewUserFactory = () => {
     password: '12345',
     cpf: '111222x3301',
     photo: fakePhoto,
-    // eslint-disable-next-line no-dupe-keys
     address: fakeAddress,
     phone: fakePhone,
     cep: '1234678',
@@ -73,7 +71,6 @@ const existingUserFactory = async () => {
     password: fakePassword,
     cpf: fakeCpf,
     photo: fakePhoto,
-    // eslint-disable-next-line no-dupe-keys
     phone: fakePhone,
     address: fakeAddress,
     cep: '12345-678',
