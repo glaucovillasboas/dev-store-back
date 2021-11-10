@@ -1,6 +1,4 @@
-/* eslint-disable no-unneeded-ternary */
 /* eslint-disable comma-dangle */
-/* eslint-disable import/prefer-default-export */
 import bcrypt from 'bcrypt';
 import connection from '../database.js';
 import { signUpSchema } from '../../schemas/userSchema.js';
@@ -77,4 +75,4 @@ const signUp = async (req, res) => {
   }
 };
 
-export { signUp };
+export default signUp;
