@@ -32,6 +32,7 @@ describe('POST /sign-up', () => {
   });
 
   afterAll(async () => {
+    await connection.query('DELETE FROM sessions;');
     await connection.query('DELETE FROM addresses;');
     await connection.query('DELETE FROM phones;');
     await connection.query('DELETE FROM users;');
