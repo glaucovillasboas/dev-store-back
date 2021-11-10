@@ -50,6 +50,8 @@ const signIn = async (req, res) => {
 
     res.status(200).send({
       token,
+      name: user.name,
+      photo: user.photo,
     });
   } catch (err) {
     return res.sendStatus(500);

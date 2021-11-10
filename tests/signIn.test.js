@@ -21,6 +21,8 @@ describe('POST /sign-in', () => {
             .send(validUser);
         expect(result.status).toEqual(200);
         expect(result.body).toHaveProperty('token');
+        expect(result.body).toHaveProperty('name');
+        expect(result.body).toHaveProperty('photo');
     });
 
     test('returns 200 with valid user and password and user is already logged in', async () => {
@@ -30,6 +32,8 @@ describe('POST /sign-in', () => {
             .send(validUser);
         expect(result.status).toEqual(200);
         expect(result.body).toHaveProperty('token');
+        expect(result.body).toHaveProperty('name');
+        expect(result.body).toHaveProperty('photo');
     });
 
 
