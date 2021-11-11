@@ -17,7 +17,7 @@ const signUpSchema = joi.object({
     .pattern(/^([-\.\s]?(\d{3})){3}[-\.\s]?(\d{2})$/)
     .required(),
   phone: joi.string().min(14).max(16).required(),
-  photo: joi.string().uri().required(),
+  photo: joi.string().uri().allow(null, ''),
   address: joi.string().required(),
   cep: joi
     .string()
