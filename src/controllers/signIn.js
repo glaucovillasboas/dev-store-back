@@ -1,5 +1,4 @@
-/* eslint import/prefer-default-export: "off" */
-/* eslint consistent-return: "off" */
+/* eslint-disable comma-dangle */
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import connection from '../database.js';
@@ -15,8 +14,11 @@ const signIn = async (req, res) => {
   }
 
   try {
-    const userQuery = await connection.query(`
-        SELECT * FROM users WHERE email = $1;`, [email]);
+    const userQuery = await connection.query(
+      `
+        SELECT * FROM users WHERE email = $1;`,
+      [email]
+    );
 
     const user = userQuery.rows[0];
 
@@ -32,23 +34,32 @@ const signIn = async (req, res) => {
     const jwtSecret = process.env.JWT_SECRET;
     const token = jwt.sign(data, jwtSecret);
 
-    const sessionQuery = await connection.query(`
+    const sessionQuery = await connection.query(
+      `
             SELECT * FROM sessions WHERE user_id = $1;
-        `, [user.id]);
+        `,
+      [user.id]
+    );
 
     const session = sessionQuery.rows[0];
 
     if (!session) {
-      await connection.query(`
+      await connection.query(
+        `
             INSERT INTO sessions (user_id, token) VALUES ($1, $2);
-        `, [user.id, token]);
+        `,
+        [user.id, token]
+      );
     } else {
-      await connection.query(`
+      await connection.query(
+        `
             UPDATE sessions SET token = $1 WHERE user_id = $2;
-        `, [token, user.id]);
+        `,
+        [token, user.id]
+      );
     }
 
-    res.status(200).send({
+    return res.status(200).send({
       token,
       name: user.name,
       photo: user.photo,
@@ -58,6 +69,4 @@ const signIn = async (req, res) => {
   }
 };
 
-export {
-  signIn,
-};
+export default signIn;
