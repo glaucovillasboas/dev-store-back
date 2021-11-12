@@ -9,7 +9,8 @@ const getProductByCode = async (req, res) => {
         products.id, products.name, products.price, products.description, products.code, products.photo, products.quantity,
         categories.name AS category_name
       FROM products
-        JOIN categories ON products.category_id = categories.id
+        JOIN categories
+          ON products.category_id = categories.id
       WHERE products.code = $1`, [code]
     );
 
@@ -27,7 +28,6 @@ const getProductByCode = async (req, res) => {
 
     return res.status(200).send({ ...product, aspects });
   } catch (err) {
-    res.send(err);
     return res.sendStatus(500);
   }
 };
