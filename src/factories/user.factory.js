@@ -1,22 +1,11 @@
 import faker from 'faker';
-import bcrypt from 'bcrypt';
-import connection from '../database.js';
+import { existingUserFactory } from './registration.factory.js';
 
 const validUserFactory = async () => {
-  const fakeName = `${faker.name.firstName()} ${faker.name.middleName()} ${faker.name.lastName()}`;
-  const fakeEmail = faker.internet.email();
-  const fakePassword = faker.internet.password();
-  const fakeCpf = `${faker.datatype.number(9)}${(faker.datatype.number(999999999) + 1000000000)}`;
-  const fakePhoto = faker.internet.avatar();
-  const encryptedPassword = bcrypt.hashSync(fakePassword, 10);
-
-  await connection.query(`
-            INSERT INTO users (name, email, password, cpf, photo) VALUES ($1, $2, $3, $4, $5);
-        `, [fakeName, fakeEmail, encryptedPassword, fakeCpf, fakePhoto]);
-
+  const user = await existingUserFactory();
   return {
-    email: fakeEmail,
-    password: fakePassword,
+    email: user.email,
+    password: user.password,
   };
 };
 
@@ -34,7 +23,7 @@ const invalidUserFactory = () => ({
 });
 
 const nonExistentUserFactory = () => ({
-  email: faker.internet.email(),
+  email: 'nonexistentemail@nonexistent.com',
   password: faker.internet.password(),
 });
 
