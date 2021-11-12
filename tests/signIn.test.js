@@ -15,6 +15,13 @@ afterAll(async () => {
 });
 
 describe('POST /sign-in', () => {
+  beforeAll(async () => {
+    await connection.query('DELETE FROM sessions;');
+    await connection.query('DELETE FROM addresses;');
+    await connection.query('DELETE FROM phones;');
+    await connection.query('DELETE FROM users;');
+  });
+
   test('returns 200 with valid user and password', async () => {
     const validUser = await validUserFactory();
     const result = await supertest(app).post('/sign-in').send(validUser);
@@ -26,6 +33,7 @@ describe('POST /sign-in', () => {
 
   test('returns 200 with valid user and password and user is already logged in', async () => {
     const validUser = await validUserFactory();
+    await supertest(app).post('/sign-in').send(validUser);
     const result = await supertest(app).post('/sign-in').send(validUser);
     expect(result.status).toEqual(200);
     expect(result.body).toHaveProperty('token');
@@ -55,6 +63,8 @@ describe('POST /sign-in', () => {
 
   afterAll(async () => {
     await connection.query('DELETE FROM sessions;');
+    await connection.query('DELETE FROM addresses;');
+    await connection.query('DELETE FROM phones;');
     await connection.query('DELETE FROM users;');
   });
 });

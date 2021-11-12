@@ -6,7 +6,6 @@ import { signInSchema } from '../../schemas/userSchema.js';
 
 const signIn = async (req, res) => {
   const { email, password } = req.body;
-
   const validation = signInSchema.validate(req.body);
 
   if (validation.error) {
@@ -16,12 +15,13 @@ const signIn = async (req, res) => {
   try {
     const userQuery = await connection.query(
       `
-        SELECT * FROM users WHERE email = $1;`,
+        SELECT users.*
+        FROM users
+        WHERE users.email = $1;`,
       [email]
     );
 
     const user = userQuery.rows[0];
-
     if (!user) {
       return res.sendStatus(404);
     }
@@ -65,6 +65,7 @@ const signIn = async (req, res) => {
       photo: user.photo,
     });
   } catch (err) {
+    console.log(err);
     return res.sendStatus(500);
   }
 };
