@@ -9,6 +9,7 @@ import {
   nonExistentUserFactory,
 } from '../src/factories/user.factory.js';
 
+
 afterAll(async () => {
   connection.end();
 });
