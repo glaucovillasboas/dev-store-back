@@ -21,7 +21,6 @@ describe('GET /user', () => {
     test('returns 200 with valid session', async () => {
         const validSession = await validSessionFactory();
         const result = await supertest(app).get('/user').set('Authorization', `Bearer ${validSession.token}`);
-        console.log(result.body);
         expect(result.status).toEqual(200);
         expect(result.body).toHaveProperty('name');
         expect(result.body).toHaveProperty('phone');

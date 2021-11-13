@@ -17,7 +17,7 @@ const getProductByCode = async (req, res) => {
     const product = productsQuery.rows[0];
 
     if (!product) {
-      res.sendStatus(404);
+      return res.sendStatus(404);
     }
 
     const aspectsQuery = await connection.query(
@@ -26,8 +26,18 @@ const getProductByCode = async (req, res) => {
 
     const aspects = aspectsQuery.rows;
 
-    return res.status(200).send({ ...product, aspects });
+    return res.status(200).send({
+      aspects,
+      name: product.name,
+      price: product.price,
+      description: product.description,
+      code: product.code,
+      photo: product.photo,
+      quantity: product.quantity,
+      category_name: product.category_name,
+    });
   } catch (err) {
+    console.log(err);
     return res.sendStatus(500);
   }
 };
