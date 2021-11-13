@@ -28,4 +28,8 @@ const signUpSchema = joi.object({
   state: joi.number().min(1).max(27).required(),
 });
 
-export { signInSchema, signUpSchema };
+const getUserSchema = joi.object({
+  token: joi.string().required(),
+});
+
+export { signInSchema, signUpSchema, getUserSchema };

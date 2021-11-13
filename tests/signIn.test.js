@@ -9,11 +9,20 @@ import {
   nonExistentUserFactory,
 } from '../src/factories/user.factory.js';
 
+
 afterAll(async () => {
   connection.end();
 });
 
+beforeAll(async () => {
+  await connection.query('DELETE FROM sessions;');
+  await connection.query('DELETE FROM addresses;');
+  await connection.query('DELETE FROM phones;');
+  await connection.query('DELETE FROM users;');
+});
+
 describe('POST /sign-in', () => {
+
   test('returns 200 with valid user and password', async () => {
     const validUser = await validUserFactory();
     const result = await supertest(app).post('/sign-in').send(validUser);
@@ -21,15 +30,20 @@ describe('POST /sign-in', () => {
     expect(result.body).toHaveProperty('token');
     expect(result.body).toHaveProperty('name');
     expect(result.body).toHaveProperty('photo');
+    expect(result.body).toHaveProperty('phone');
+    expect(result.body).toHaveProperty('address');
   });
 
   test('returns 200 with valid user and password and user is already logged in', async () => {
     const validUser = await validUserFactory();
+    await supertest(app).post('/sign-in').send(validUser);
     const result = await supertest(app).post('/sign-in').send(validUser);
     expect(result.status).toEqual(200);
     expect(result.body).toHaveProperty('token');
     expect(result.body).toHaveProperty('name');
     expect(result.body).toHaveProperty('photo');
+    expect(result.body).toHaveProperty('address');
+    expect(result.body).toHaveProperty('phone');
   });
 
   test('returns 400 with invalid user', async () => {
@@ -54,6 +68,8 @@ describe('POST /sign-in', () => {
 
   afterAll(async () => {
     await connection.query('DELETE FROM sessions;');
+    await connection.query('DELETE FROM addresses;');
+    await connection.query('DELETE FROM phones;');
     await connection.query('DELETE FROM users;');
   });
 });
