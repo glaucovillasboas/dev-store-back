@@ -51,7 +51,7 @@ const signIn = async (req, res) => {
       return res.sendStatus(401);
     }
 
-    const data = { email: user.email };
+    const data = { userId: user.id };
     const jwtSecret = process.env.JWT_SECRET;
     const token = jwt.sign(data, jwtSecret);
 
