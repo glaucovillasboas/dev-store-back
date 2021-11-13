@@ -14,13 +14,14 @@ afterAll(async () => {
   connection.end();
 });
 
+beforeAll(async () => {
+  await connection.query('DELETE FROM sessions;');
+  await connection.query('DELETE FROM addresses;');
+  await connection.query('DELETE FROM phones;');
+  await connection.query('DELETE FROM users;');
+});
+
 describe('POST /sign-in', () => {
-  beforeAll(async () => {
-    await connection.query('DELETE FROM sessions;');
-    await connection.query('DELETE FROM addresses;');
-    await connection.query('DELETE FROM phones;');
-    await connection.query('DELETE FROM users;');
-  });
 
   test('returns 200 with valid user and password', async () => {
     const validUser = await validUserFactory();
