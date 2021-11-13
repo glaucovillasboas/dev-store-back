@@ -40,10 +40,10 @@ const validProductFactory = async () => {
     'SELECT * FROM products WHERE name = $1', [product.name],
   );
 
-  const completeProduct = productQuery.rows[0].code;
+  const completeProduct = productQuery.rows[0];
 
   return {
-    completeProduct,
+    ...completeProduct,
   };
 };
 

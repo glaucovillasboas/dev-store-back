@@ -1,11 +1,7 @@
-import jwt from 'jsonwebtoken';
 import { validSessionFactory } from './session.factory.js';
-import connection from '../database.js';
 
 const validCartFactory = async () => {
   const { token } = await validSessionFactory();
-
-
 
   return {
     token,
@@ -17,6 +13,6 @@ const invalidSessionFactory = () => ({
 });
 
 export {
-  validSessionFactory,
+  validCartFactory,
   invalidSessionFactory,
 };
