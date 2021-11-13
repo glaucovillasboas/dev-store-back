@@ -20,13 +20,6 @@ afterAll(async () => {
   connection.end();
 });
 
-beforeAll(async () => {
-  await connection.query('DELETE FROM sessions;');
-  await connection.query('DELETE FROM addresses;');
-  await connection.query('DELETE FROM phones;');
-  await connection.query('DELETE FROM users;');
-});
-
 describe('POST /sign-in', () => {
 
   test('returns 200 with valid user and password', async () => {
