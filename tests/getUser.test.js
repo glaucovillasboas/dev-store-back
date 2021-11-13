@@ -11,16 +11,10 @@ afterAll(async () => {
     connection.end();
 });
 
-beforeAll(async () => {
-    await connection.query('DELETE FROM sessions;');
-    await connection.query('DELETE FROM addresses;');
-    await connection.query('DELETE FROM phones;');
-    await connection.query('DELETE FROM users;');
-});
-
 describe('GET /user', () => {
     test('returns 200 with valid user token', async () => {
         const validSession = await validSessionFactory();
+        console.log(validSession);
         const result = await supertest(app).get('/user').set('Authorization', `Bearer ${validSession.token}`);
         expect(result.status).toEqual(200);
         expect(result.body).toHaveProperty('name');
