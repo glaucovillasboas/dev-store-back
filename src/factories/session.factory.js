@@ -14,7 +14,7 @@ const validSessionFactory = async () => {
 
   const userId = userQuery.rows[0].id;
 
-  const data = { userId };
+  const data = { id: userId, email: user.email, name: user.name };
   const jwtSecret = process.env.JWT_SECRET;
   const token = jwt.sign(data, jwtSecret);
 
