@@ -1,12 +1,14 @@
 /* eslint-disable comma-dangle */
-import connection from '../database.js';
+import jwt from 'jsonwebtoken';
 
 const addCart = async (req, res) => {
-  try {
+  const { authorization } = req.headers;
+  const token = authorization?.split('Bearer ')[1];
 
-  } catch (err) {
-    return res.sendStatus(500);
-  }
+  const jwtSecret = process.env.JWT_SECRET;
+  const user = jwt.verify(token, jwtSecret);
+
+  res.send(user);
 };
 
 export default addCart;
