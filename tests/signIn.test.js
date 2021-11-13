@@ -29,6 +29,8 @@ describe('POST /sign-in', () => {
     expect(result.body).toHaveProperty('token');
     expect(result.body).toHaveProperty('name');
     expect(result.body).toHaveProperty('photo');
+    expect(result.body).toHaveProperty('phone');
+    expect(result.body).toHaveProperty('address');
   });
 
   test('returns 200 with valid user and password and user is already logged in', async () => {
@@ -39,6 +41,8 @@ describe('POST /sign-in', () => {
     expect(result.body).toHaveProperty('token');
     expect(result.body).toHaveProperty('name');
     expect(result.body).toHaveProperty('photo');
+    expect(result.body).toHaveProperty('address');
+    expect(result.body).toHaveProperty('phone');
   });
 
   test('returns 400 with invalid user', async () => {
