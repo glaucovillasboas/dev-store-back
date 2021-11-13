@@ -37,13 +37,13 @@ const validProductFactory = async () => {
   );
 
   const productQuery = await connection.query(
-    'SELECT code FROM products WHERE name = $1', [product.name],
+    'SELECT * FROM products WHERE name = $1', [product.name],
   );
 
-  const productCode = productQuery.rows[0].code;
+  const completeProduct = productQuery.rows[0].code;
 
   return {
-    code: productCode,
+    completeProduct,
   };
 };
 
