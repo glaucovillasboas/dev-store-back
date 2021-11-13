@@ -5,6 +5,8 @@ import signIn from './controllers/signIn.js';
 import signUp from './controllers/signUp.js';
 import getProductByCode from './controllers/products.js';
 import getUser from './controllers/getUser.js';
+import addCart from './controllers/cart.js';
+import auth from './middlewares/auth.js';
 
 const app = express();
 app.use(express.json());
@@ -21,5 +23,7 @@ app.post('/sign-up', signUp);
 app.get('/products/:code', getProductByCode);
 
 app.get('/user', getUser);
+
+app.post('/cart', auth, addCart);
 
 export default app;
