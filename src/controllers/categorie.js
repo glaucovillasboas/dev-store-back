@@ -6,14 +6,22 @@ const getCategorieById = async (req, res) => {
   try {
     const categorieQuery = await connection.query(
       `
+      SELECT * FROM categories WHERE categories.id = $1
+    `,
+      [id]
+    );
+
+    if (categorieQuery.rowCount === 0) {
+      return res.sendStatus(404);
+    }
+
+    const categorieProductsQuery = await connection.query(
+      `
       SELECT * FROM products WHERE products.category_id = $1
     `,
       [id]
     );
-    const products = categorieQuery.rows;
-    if (!products.length) {
-      return res.sendStatus(404);
-    }
+    const products = categorieProductsQuery.rows;
 
     return res.status(200).send(products);
   } catch (err) {
