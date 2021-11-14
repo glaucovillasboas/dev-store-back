@@ -10,6 +10,7 @@ import {
   getCategories,
 } from './controllers/products.js';
 import getUser from './controllers/getUser.js';
+import getCategorieById from './controllers/categorie.js';
 
 const app = express();
 app.use(express.json());
@@ -30,6 +31,8 @@ app.get('/highlights', getProductsHighlights);
 app.get('/on-sale', getProductsOnSale);
 
 app.get('/categories', getCategories);
+
+app.get('/categorie/:id', getCategorieById);
 
 app.get('/user', getUser);
 
