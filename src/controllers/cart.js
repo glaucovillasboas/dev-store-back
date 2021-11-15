@@ -9,7 +9,7 @@ const addCart = async (req, res) => {
   const validation = productSchema.validate(product);
 
   if (validation.error) {
-    return res.sendStatus(404);
+    return res.sendStatus(400);
   }
 
   const { authorization } = req.headers;

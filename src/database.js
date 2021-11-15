@@ -1,7 +1,6 @@
 import pg from 'pg';
 
 const { Pool } = pg;
-pg.defaults.poolSize = 1;
 
 let connData = {
   user: process.env.DB_USER,

@@ -29,7 +29,7 @@ describe('post /cart', () => {
         expect(result.status).toEqual(200);
     });
 
-    test('returns 404 with valid product code', async () => {
+    test('returns 404 with invalid product code', async () => {
         const { token } = await validSessionFactory();
 
         const result = await supertest(app).post('/cart')
