@@ -16,8 +16,15 @@ describe('post /cart', () => {
         const { token } = await validSessionFactory();
         const validProduct = await validProductFactory();
 
+        const sessionQuery = await connection.query(
+            'SELECT * FROM sessions WHERE token = $1;',
+            [token],
+        );
+
+        session = sessionQuery.rows[0];
+
         const result = await supertest(app).post('/cart')
-            .send({ id: validProduct.id })
+            .send({ id: validProduct.code })
             .set('Authorization', `Bearer ${token}`);
         expect(result.status).toEqual(200);
     });

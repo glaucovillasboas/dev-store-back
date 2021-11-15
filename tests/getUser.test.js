@@ -14,7 +14,10 @@ afterAll(async () => {
 describe('GET /user', () => {
     test('returns 200 with valid user token', async () => {
         const validSession = await validSessionFactory();
-        console.log(validSession);
+        await connection.query(
+            'SELECT * FROM sessions WHERE token = $1;',
+            [validSession.token],
+        );
         const result = await supertest(app).get('/user').set('Authorization', `Bearer ${validSession.token}`);
         expect(result.status).toEqual(200);
         expect(result.body).toHaveProperty('name');
@@ -24,7 +27,7 @@ describe('GET /user', () => {
     });
 
     test('returns 401 with invalid user token', async () => {
-        const invalidSession = await invalidSessionFactory();
+        const invalidSession = invalidSessionFactory();
         const result = await supertest(app).get('/user').set('Authorization', `Bearer ${invalidSession.token}`);
         expect(result.status).toEqual(401);
     });

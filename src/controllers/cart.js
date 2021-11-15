@@ -1,6 +1,5 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable consistent-return */
-
 import jwt from 'jsonwebtoken';
 import connection from '../database.js';
 import productSchema from '../../schemas/productSchema.js';
@@ -10,7 +9,7 @@ const addCart = async (req, res) => {
   const validation = productSchema.validate(product);
 
   if (validation.error) {
-    return res.sendStatus(400);
+    return res.sendStatus(404);
   }
 
   const { authorization } = req.headers;
@@ -20,6 +19,16 @@ const addCart = async (req, res) => {
   const user = jwt.verify(token, jwtSecret);
 
   try {
+    const productQuery = await connection.query(
+      'SELECT * FROM products WHERE code = $1', [product.code],
+    );
+
+    product.id = productQuery.rows[0].id;
+
+    if (!product.id) {
+      return res.sendStatus(404);
+    }
+
     let cartQuery = await connection.query(
       'SELECT * FROM carts WHERE user_id = $1 AND "finishedAt" IS NULL', [user.id],
     );
@@ -61,4 +70,97 @@ const addCart = async (req, res) => {
   }
 };
 
-export default addCart;
+const deleteProduct = async (req, res) => {
+  const { code } = req.params;
+  const validation = productSchema.validate(req.params);
+
+  if (validation.error) {
+    return res.sendStatus(400);
+  }
+
+  const { authorization } = req.headers;
+  const token = authorization?.split('Bearer ')[1];
+
+  const jwtSecret = process.env.JWT_SECRET;
+  const user = jwt.verify(token, jwtSecret);
+
+  try {
+    const cartQuery = await connection.query(
+      'SELECT * FROM carts WHERE user_id = $1 AND "finishedAt" IS NULL', [user.id],
+    );
+
+    const cart = cartQuery.rows[0];
+
+    if (!cart) {
+      return res.sendStatus(404);
+    }
+
+    const productQuery = await connection.query(
+      'SELECT id FROM products WHERE code = $1', [code],
+    );
+
+    const product = productQuery.rows[0];
+
+    if (!product) {
+      return res.sendStatus(404);
+    }
+
+    await connection.query(
+      `
+      DELETE FROM carts_products
+      WHERE cart_id = $1 AND product_id = $2`, [cart.id, product.id],
+    );
+
+    res.sendStatus(200);
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
+};
+
+const getCart = async (req, res) => {
+  const { authorization } = req.headers;
+  const token = authorization?.split('Bearer ')[1];
+
+  const jwtSecret = process.env.JWT_SECRET;
+  const user = jwt.verify(token, jwtSecret);
+
+  try {
+    const cartQuery = await connection.query(
+      'SELECT * FROM carts WHERE user_id = $1 AND "finishedAt" IS NULL', [user.id],
+    );
+
+    const cart = cartQuery.rows[0];
+
+    if (!cart) {
+      return res.sendStatus(404);
+    }
+
+    const cartsProductsQuery = await connection.query(
+      `SELECT 
+      carts_products.quantity,
+      products.id, products.name, products.price, products.photo, products.code, products.description
+    FROM carts_products
+      JOIN products
+        ON products.id = carts_products.product_id
+    WHERE cart_id = $1`, [cart.id],
+    );
+
+    const cartsProducts = cartsProductsQuery.rows;
+
+    let total = 0;
+    cartsProducts.forEach((product, i) => {
+      total += product.price * product.quantity;
+      cartsProducts[i].price = product.price * product.quantity;
+    });
+
+    res.send({
+      products: cartsProducts,
+      total,
+    });
+  } catch (err) {
+    res.sendStatus(500);
+  }
+};
+
+export { addCart, getCart, deleteProduct };

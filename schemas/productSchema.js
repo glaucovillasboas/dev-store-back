@@ -1,7 +1,7 @@
 import joi from 'joi';
 
 const productSchema = joi.object({
-  id: joi.number().required(),
+  code: joi.string().min(10).max(10).required(),
 });
 
 export default productSchema;

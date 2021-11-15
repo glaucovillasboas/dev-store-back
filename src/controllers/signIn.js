@@ -14,14 +14,11 @@ const signIn = async (req, res) => {
 
   try {
     const userQuery = await connection.query(
-      `
-        SELECT users.*
-        FROM users
-        WHERE users.email = $1;`,
-      [email]
+      'SELECT * FROM users WHERE users.email = $1;', [email]
     );
 
     const user = userQuery.rows[0];
+
     if (!user) {
       return res.sendStatus(404);
     }

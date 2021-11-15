@@ -1,3 +1,4 @@
+/* eslint-disable  prefer-destructuring */
 import jwt from 'jsonwebtoken';
 import { existingUserFactory } from './registration.factory.js';
 import connection from '../database.js';
@@ -38,7 +39,7 @@ const validSessionFactory = async () => {
   }
 
   return {
-    token,
+    token: session.token,
   };
 };
 
