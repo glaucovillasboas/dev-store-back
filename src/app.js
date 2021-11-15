@@ -11,6 +11,7 @@ import {
 } from './controllers/products.js';
 import getUser from './controllers/getUser.js';
 import getCategorieById from './controllers/categorie.js';
+import getResearchedProduct from './controllers/search.js';
 
 const app = express();
 app.use(express.json());
@@ -35,5 +36,7 @@ app.get('/categories', getCategories);
 app.get('/categorie/:id', getCategorieById);
 
 app.get('/user', getUser);
+
+app.get('/search', getResearchedProduct);
 
 export default app;
