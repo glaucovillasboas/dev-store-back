@@ -11,7 +11,8 @@ const getProductByCode = async (req, res) => {
       FROM products
         JOIN categories
           ON products.category_id = categories.id
-      WHERE products.code = $1`, [code]
+      WHERE products.code = $1`,
+      [code]
     );
 
     const product = productsQuery.rows[0];
@@ -21,7 +22,12 @@ const getProductByCode = async (req, res) => {
     }
 
     const aspectsQuery = await connection.query(
-      'SELECT name, value FROM aspects WHERE product_id = $1', [product.id]
+      `
+      SELECT
+        name, value
+      FROM aspects
+      WHERE product_id = $1`,
+      [product.id]
     );
 
     const aspects = aspectsQuery.rows;
@@ -37,9 +43,60 @@ const getProductByCode = async (req, res) => {
       category_name: product.category_name,
     });
   } catch (err) {
-    console.log(err);
     return res.sendStatus(500);
   }
 };
 
-export default getProductByCode;
+const getProductsHighlights = async (req, res) => {
+  try {
+    const highlightsQuery = await connection.query(`
+      SELECT
+        *
+      FROM products
+      ORDER BY price DESC
+      LIMIT 10
+    `);
+
+    return res.status(200).send(highlightsQuery.rows);
+  } catch (err) {
+    return res.sendStatus(500);
+  }
+};
+
+const getProductsOnSale = async (req, res) => {
+  try {
+    const onSaleQuery = await connection.query(`
+      SELECT
+        *
+      FROM products
+      ORDER BY price ASC
+      LIMIT 10
+    `);
+
+    return res.status(200).send(onSaleQuery.rows);
+  } catch (err) {
+    return res.sendStatus(500);
+  }
+};
+
+const getCategories = async (req, res) => {
+  try {
+    const categoriesQuery = await connection.query(`
+      SELECT
+        *
+      FROM categories
+      LIMIT 10
+    `);
+
+    return res.status(200).send(categoriesQuery.rows);
+  } catch (err) {
+    return res.sendStatus(500);
+  }
+};
+
+export {
+  getProductByCode,
+  getProductsHighlights,
+  getProductsOnSale,
+  getCategories,
+};
