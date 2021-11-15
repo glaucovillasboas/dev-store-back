@@ -113,7 +113,6 @@ const deleteProduct = async (req, res) => {
 
     res.sendStatus(200);
   } catch (err) {
-    console.log(err);
     res.sendStatus(500);
   }
 };
@@ -156,7 +155,7 @@ const getCart = async (req, res) => {
 
     res.send({
       products: cartsProducts,
-      total,
+      total: total.toFixed(2),
     });
   } catch (err) {
     res.sendStatus(500);
