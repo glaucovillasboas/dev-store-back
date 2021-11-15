@@ -1,8 +1,15 @@
 import faker from 'faker';
 import { existingUserFactory } from './registration.factory.js';
+import connection from '../database.js';
 
 const validUserFactory = async () => {
   const user = await existingUserFactory();
+
+  await connection.query(
+    'SELECT * FROM users WHERE email = $1;',
+    [user.email],
+  );
+
   return {
     email: user.email,
     password: user.password,

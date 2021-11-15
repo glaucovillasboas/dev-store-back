@@ -34,8 +34,8 @@ const getUser = async (req, res) => {
           states.name AS state
         FROM addresses
           JOIN states
-            ON states.id = addresses.state_id
-        WHERE user_id = $1`, [user.id]
+            ON states.id = addresses.state_id AND addresses.user_id = $1
+        WHERE addresses.user_id = $1`, [user.id]
     );
 
     const address = addressesQuery.rows[0];
