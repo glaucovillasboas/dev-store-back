@@ -5,16 +5,27 @@ import connection from '../src/database.js';
 import {
   validNewUserFactory,
   invalidNewUserFactory,
-  existingUserFactory,
 } from '../src/factories/registration.factory';
 
+const createdUsers = [];
+
 afterAll(async () => {
+  const userQuery = await connection.query(
+    'SELECT * FROM users WHERE users.email = $1;', [createdUsers[0].email]
+  );
+
+  const user = userQuery.rows[0];
+  await connection.query(`DELETE FROM sessions WHERE user_id = $1;`, [user.id]);
+  await connection.query(`DELETE FROM addresses WHERE user_id = $1;`, [user.id]);
+  await connection.query(`DELETE FROM phones WHERE user_id = $1;`, [user.id]);
+  await connection.query(`DELETE FROM users WHERE id = $1;`, [user.id]);
   connection.end();
 });
 
 describe('POST /sign-up', () => {
   test('returns 201 with valid new user data', async () => {
     const validNewUser = validNewUserFactory();
+    createdUsers.push(validNewUser);
     const result = await supertest(app).post('/sign-up').send(validNewUser);
     expect(result.status).toEqual(201);
   });
@@ -26,15 +37,8 @@ describe('POST /sign-up', () => {
   });
 
   test('returns 409 when the user already exists', async () => {
-    const existingUser = await existingUserFactory();
+    const existingUser = createdUsers[0];
     const result = await supertest(app).post('/sign-up').send(existingUser);
     expect(result.status).toEqual(409);
-  });
-
-  afterAll(async () => {
-    await connection.query('DELETE FROM sessions;');
-    await connection.query('DELETE FROM addresses;');
-    await connection.query('DELETE FROM phones;');
-    await connection.query('DELETE FROM users;');
   });
 });

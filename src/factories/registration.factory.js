@@ -47,40 +47,7 @@ const invalidNewUserFactory = () => {
   };
 };
 
-const existingUserFactory = async (requiresNewUser) => {
-  if (!requiresNewUser) {
-    const preRegistredUserQuery = await connection.query(
-      'SELECT * FROM users'
-    );
-
-    const preRegistredUser = preRegistredUserQuery.rows[0];
-
-    if (preRegistredUser) {
-      const addressesQuery = await connection.query(
-        'SELECT * FROM addresses WHERE user_id = $1', [preRegistredUser.id]
-      );
-      const address = addressesQuery.rows[0];
-
-      const phonesQuery = await connection.query(
-        'SELECT * FROM phones WHERE user_id = $1', [preRegistredUser.id]
-      );
-      const phone = phonesQuery.rows[0];
-
-      return {
-        name: preRegistredUser.name,
-        email: preRegistredUser.email,
-        password: preRegistredUser.password,
-        cpf: preRegistredUser.cpf,
-        photo: preRegistredUser.photo,
-        phone: phone.phone,
-        address: address.address,
-        cep: address.cep,
-        complement: address.complement,
-        state: address.state_id,
-      };
-    }
-  }
-
+const existingUserFactory = async () => {
   const newUser = validNewUserFactory();
   const encryptedPassword = bcrypt.hashSync(newUser.password, 10);
   await connection.query(

@@ -1,8 +1,12 @@
+import faker from 'faker';
 import connection from '../database.js';
 
 const validProductFactory = async () => {
+  const fakeCategory = faker.name.firstName();
+  const fakeProduct = faker.name.firstName();
+
   const category = {
-    name: 'Category',
+    name: fakeCategory,
   };
 
   await connection.query(
@@ -16,7 +20,7 @@ const validProductFactory = async () => {
   const categoryId = categoryQuery.rows[0].id;
 
   const product = {
-    name: 'teste',
+    name: fakeProduct,
     description: 'teste',
     price: 720.50,
     quantity: 109,

@@ -4,17 +4,7 @@ import { existingUserFactory } from './registration.factory.js';
 import connection from '../database.js';
 
 const validSessionFactory = async () => {
-  const preSessionQuery = await connection.query(
-    'SELECT * FROM sessions',
-  );
-
-  const preSession = preSessionQuery.rows[0];
-
-  if (preSession) {
-    return { token: preSession.token };
-  }
-
-  const user = await existingUserFactory(true);
+  const user = await existingUserFactory();
 
   const userQuery = await connection.query(
     `   SELECT users.*
