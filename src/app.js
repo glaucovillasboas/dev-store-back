@@ -13,6 +13,7 @@ import getUser from './controllers/getUser.js';
 import { addCart, getCart, deleteProduct } from './controllers/cart.js';
 import auth from './middlewares/auth.js';
 import getCategorieById from './controllers/categorie.js';
+import getResearchedProduct from './controllers/search.js';
 
 const app = express();
 app.use(express.json());
@@ -37,6 +38,8 @@ app.get('/categories', getCategories);
 app.get('/categorie/:id', getCategorieById);
 
 app.get('/user', getUser);
+
+app.post('/search', getResearchedProduct);
 
 app.get('/cart', auth, getCart);
 
