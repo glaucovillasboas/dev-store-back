@@ -24,6 +24,7 @@ afterAll(async () => {
 });
 
 describe('POST /sign-in', () => {
+  //A TABLEA DE ESTADOS PRECISA SER POPULADA COM OS DADOS DO DUMP PARA O TESTE FUNCIONAR
   test('returns 200 with valid user and password', async () => {
     const validUser = await validUserFactory();
     createdUsers.push(validUser);
