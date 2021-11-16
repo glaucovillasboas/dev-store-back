@@ -11,13 +11,6 @@ afterAll(async () => {
     connection.end();
 });
 
-beforeAll(async () => {
-    await connection.query('DELETE FROM sessions;');
-    await connection.query('DELETE FROM addresses;');
-    await connection.query('DELETE FROM phones;');
-    await connection.query('DELETE FROM users;');
-});
-
 describe('GET /user', () => {
     test('returns 200 with valid user token', async () => {
         const validSession = await validSessionFactory();
@@ -30,7 +23,7 @@ describe('GET /user', () => {
     });
 
     test('returns 401 with invalid user token', async () => {
-        const invalidSession = await invalidSessionFactory();
+        const invalidSession = invalidSessionFactory();
         const result = await supertest(app).get('/user').set('Authorization', `Bearer ${invalidSession.token}`);
         expect(result.status).toEqual(401);
     });

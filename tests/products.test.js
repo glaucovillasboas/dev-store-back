@@ -29,7 +29,7 @@ describe('get /products/:code', () => {
     });
 
     test('returns 404 with invalid product', async () => {
-        const invalidProduct = await invalidProductFactory();
+        const invalidProduct = invalidProductFactory();
         const result = await supertest(app).get(`/products/${invalidProduct.code}`);
         expect(result.status).toEqual(404);
     });
