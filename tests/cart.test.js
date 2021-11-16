@@ -17,7 +17,6 @@ afterAll(async () => {
     connection.end();
 });
 
-
 describe('post /cart', () => {
     test('returns 200 with valid product and token', async () => {
         const { token } = await validSessionFactory();
@@ -33,7 +32,7 @@ describe('post /cart', () => {
         const { token } = await validSessionFactory();
 
         const result = await supertest(app).post('/cart')
-            .send({ code: '123' })
+            .send({ code: '9090649805' })
             .set('Authorization', `Bearer ${token}`);
         expect(result.status).toEqual(404);
     });

@@ -20,7 +20,7 @@ afterAll(async () => {
 
 describe('post /finish-cart', () => {
     test('returns 404 with valid token but no cart', async () => {
-        const { token } = await validSessionFactory();
+        const { token } = await validSessionFactory(true);
 
         const result = await supertest(app).post('/finish-cart')
             .set('Authorization', `Bearer ${token}`);

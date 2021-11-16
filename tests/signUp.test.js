@@ -14,13 +14,13 @@ afterAll(async () => {
 
 describe('POST /sign-up', () => {
   test('returns 201 with valid new user data', async () => {
-    const validNewUser = await validNewUserFactory();
+    const validNewUser = validNewUserFactory();
     const result = await supertest(app).post('/sign-up').send(validNewUser);
     expect(result.status).toEqual(201);
   });
 
   test('returns 400 with invalid new user data', async () => {
-    const invalidNewUser = await invalidNewUserFactory();
+    const invalidNewUser = invalidNewUserFactory();
     const result = await supertest(app).post('/sign-up').send(invalidNewUser);
     expect(result.status).toEqual(400);
   });

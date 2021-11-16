@@ -9,13 +9,6 @@ import {
   nonExistentUserFactory,
 } from '../src/factories/user.factory.js';
 
-beforeAll(async () => {
-  await connection.query('DELETE FROM sessions;');
-  await connection.query('DELETE FROM addresses;');
-  await connection.query('DELETE FROM phones;');
-  await connection.query('DELETE FROM users;');
-});
-
 afterAll(async () => {
   connection.end();
 });

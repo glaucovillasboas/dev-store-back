@@ -33,9 +33,4 @@ describe('get /products/:code', () => {
         const result = await supertest(app).get(`/products/${invalidProduct.code}`);
         expect(result.status).toEqual(404);
     });
-
-    afterAll(async () => {
-        await connection.query('DELETE FROM categories;');
-        await connection.query('DELETE FROM products;');
-    });
 });
