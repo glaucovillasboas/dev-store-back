@@ -1,20 +1,20 @@
 /* eslint-disable comma-dangle */
 import connection from '../database.js';
 
-const validCategorieId = async () => {
+const validCategoryId = async () => {
   await connection.query(`
         INSERT INTO categories (name) VALUES ('mouses');
     `);
 
-  const selectCategorie = await connection.query(
+  const selectCategory = await connection.query(
     `
         SELECT * FROM categories WHERE categories.name = 'mouses';
     `
   );
 
-  return selectCategorie.rows[0].id;
+  return selectCategory.rows[0].id;
 };
 
-const invalidCategorieId = () => 900000000;
+const invalidCategoryId = () => 900000000;
 
-export { validCategorieId, invalidCategorieId };
+export { validCategoryId, invalidCategoryId };
