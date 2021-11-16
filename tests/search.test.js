@@ -16,7 +16,7 @@ describe('POST /search', () => {
     const body = {
       name: validNewSearch(),
     };
-    const result = await await supertest(app).post('/search').send(body);
+    const result = await supertest(app).post('/search').send(body);
     expect(result.status).toEqual(200);
   });
 
