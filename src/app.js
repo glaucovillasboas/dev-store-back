@@ -10,7 +10,9 @@ import {
   getCategories,
 } from './controllers/products.js';
 import getUser from './controllers/getUser.js';
-import { addCart, getCart, deleteProduct } from './controllers/cart.js';
+import {
+  addCart, getCart, deleteProduct, finishCart,
+} from './controllers/cart.js';
 import auth from './middlewares/auth.js';
 import getCategorieById from './controllers/categorie.js';
 
@@ -41,6 +43,8 @@ app.get('/user', getUser);
 app.get('/cart', auth, getCart);
 
 app.post('/cart', auth, addCart);
+
+app.post('/finish-cart', auth, finishCart);
 
 app.delete('/cart/:code', auth, deleteProduct);
 

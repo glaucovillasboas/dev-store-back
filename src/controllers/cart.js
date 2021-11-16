@@ -162,4 +162,53 @@ const getCart = async (req, res) => {
   }
 };
 
-export { addCart, getCart, deleteProduct };
+const finishCart = async (req, res) => {
+  const { authorization } = req.headers;
+  const token = authorization?.split('Bearer ')[1];
+
+  const jwtSecret = process.env.JWT_SECRET;
+  const user = jwt.verify(token, jwtSecret);
+
+  try {
+    const cartQuery = await connection.query(
+      'SELECT * FROM carts WHERE user_id = $1 AND "finishedAt" IS NULL', [user.id],
+    );
+
+    const cart = cartQuery.rows[0];
+
+    if (!cart) {
+      return res.sendStatus(404);
+    }
+
+    const cartProductQuery = await connection.query(
+      'SELECT * FROM carts_products WHERE cart_id = $1', [cart.id],
+    );
+
+    const cartsProducts = cartProductQuery.rows;
+
+    let queryConditions = `
+      UPDATE products
+      SET quantity = CASE
+      `;
+
+    cartsProducts.forEach((product) => {
+      queryConditions += `WHEN ${product.product_id} = id THEN quantity - ${product.quantity}
+      `;
+    });
+    queryConditions += `END WHERE id IN (${cartsProducts.map((product) => product.product_id).join(',')})`;
+
+    await connection.query(queryConditions);
+
+    await connection.query(
+      'UPDATE carts SET "finishedAt" = now() WHERE id = $1', [cart.id],
+    );
+
+    res.sendStatus(200);
+  } catch (err) {
+    res.sendStatus(500);
+  }
+};
+
+export {
+  addCart, getCart, deleteProduct, finishCart,
+};
