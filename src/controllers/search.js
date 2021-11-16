@@ -7,8 +7,9 @@ const getResearchedProduct = async (req, res) => {
     const researchedName = name.toLowerCase();
     const result = await connection.query(
       `
-      SELECT * FROM products WHERE LOWER(products.name) LIKE '%${researchedName}%';
-    `
+      SELECT * FROM products WHERE LOWER(products.name) LIKE $1;
+    `,
+      [`%${researchedName}%`]
     );
     return res.status(200).send(result.rows);
   } catch (err) {

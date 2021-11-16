@@ -37,6 +37,6 @@ app.get('/categorie/:id', getCategorieById);
 
 app.get('/user', getUser);
 
-app.get('/search', getResearchedProduct);
+app.post('/search', getResearchedProduct);
 
 export default app;
