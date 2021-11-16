@@ -13,7 +13,6 @@ const createdUsers = [];
 afterAll(async () => {
     const jwtSecret = process.env.JWT_SECRET;
     const userId = jwt.verify(createdUsers[0].token, jwtSecret).id;
-
     await connection.query(`DELETE FROM sessions WHERE user_id = $1;`, [userId]);
     await connection.query(`DELETE FROM addresses WHERE user_id = $1;`, [userId]);
     await connection.query(`DELETE FROM phones WHERE user_id = $1;`, [userId]);
