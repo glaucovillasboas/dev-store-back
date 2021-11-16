@@ -21,6 +21,7 @@ afterAll(async () => {
 });
 
 describe('GET /user', () => {
+    //A TABLEA DE ESTADOS PRECISA SER POPULADA COM OS DADOS DO DUMP PARA O TESTE FUNCIONAR
     test('returns 200 with valid user token', async () => {
         const validSession = await validSessionFactory();
         createdUsers.push(validSession);
