@@ -11,7 +11,7 @@ import {
 const createdProducts = [];
 
 afterAll(async () => {
-    const categories_ids = createdProducts.map((product) => product.category_id).join(',')
+    const categories_ids = createdProducts.map((product) => product.category_id).join(',');
     await connection.query(`DELETE FROM categories WHERE id IN (${categories_ids});`);
     await connection.query(`DELETE FROM products WHERE category_id IN (${categories_ids});`);
     connection.end();

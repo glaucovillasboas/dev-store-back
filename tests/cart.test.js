@@ -11,8 +11,8 @@ const createdProducts = [];
 
 afterAll(async () => {
     const jwtSecret = process.env.JWT_SECRET;
-    const users_ids = createdUsers.map((user) => jwt.verify(user.token, jwtSecret).id).join(',')
-    const categories_ids = createdProducts.map((product) => product.category_id).join(',')
+    const users_ids = createdUsers.map((user) => jwt.verify(user.token, jwtSecret).id).join(',');
+    const categories_ids = createdProducts.map((product) => product.category_id).join(',');
     await connection.query(`DELETE FROM carts_products WHERE user_id IN (${users_ids});`);
     await connection.query(`DELETE FROM carts WHERE user_id IN (${users_ids});`);
     await connection.query(`DELETE FROM categories WHERE id IN (${categories_ids});`);

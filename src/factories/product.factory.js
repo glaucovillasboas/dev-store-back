@@ -2,8 +2,8 @@ import faker from 'faker';
 import connection from '../database.js';
 
 const validProductFactory = async () => {
-  const fakeCategory = faker.name.firstName();
-  const fakeProduct = faker.name.firstName();
+  const fakeCategory = faker.commerce.department();
+  const fakeProduct = faker.commerce.productName();
 
   const category = {
     name: fakeCategory,
