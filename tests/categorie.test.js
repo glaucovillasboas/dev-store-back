@@ -7,13 +7,18 @@ import {
   invalidCategorieId,
 } from '../src/factories/categorie.factory';
 
+let createdCategoryId = 0;
+
 afterAll(async () => {
+  await connection.query('DELETE FROM categories WHERE id = $1;', [createdCategoryId]);
   connection.end();
 });
+
 
 describe('GET /categorie/:id', () => {
   test('returns 200 with valid category id', async () => {
     const validId = await validCategorieId();
+    createdCategoryId = validId;
     const result = await supertest(app).get(`/categorie/${validId}`);
     expect(result.status).toEqual(200);
   });
@@ -22,9 +27,5 @@ describe('GET /categorie/:id', () => {
     const invalidId = invalidCategorieId();
     const result = await supertest(app).get(`/categorie/${invalidId}`);
     expect(result.status).toEqual(404);
-  });
-
-  afterAll(async () => {
-    await connection.query('DELETE FROM categories;');
   });
 });

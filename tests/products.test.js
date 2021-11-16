@@ -8,7 +8,12 @@ import {
 } from '../src/factories/product.factory.js';
 
 
+const createdProducts = [];
+
 afterAll(async () => {
+    const categories_ids = createdProducts.map((product) => product.category_id).join(',');
+    await connection.query(`DELETE FROM categories WHERE id IN (${categories_ids});`);
+    await connection.query(`DELETE FROM products WHERE category_id IN (${categories_ids});`);
     connection.end();
 });
 
@@ -17,6 +22,7 @@ describe('get /products/:code', () => {
     test('returns 200 with valid product', async () => {
         const validProduct = await validProductFactory();
         const result = await supertest(app).get(`/products/${validProduct.code}`);
+        createdProducts.push(validProduct);
         expect(result.status).toEqual(200);
         expect(result.body).toHaveProperty('name');
         expect(result.body).toHaveProperty('price');
@@ -32,10 +38,5 @@ describe('get /products/:code', () => {
         const invalidProduct = invalidProductFactory();
         const result = await supertest(app).get(`/products/${invalidProduct.code}`);
         expect(result.status).toEqual(404);
-    });
-
-    afterAll(async () => {
-        await connection.query('DELETE FROM categories;');
-        await connection.query('DELETE FROM products;');
     });
 });

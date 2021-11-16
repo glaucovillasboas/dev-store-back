@@ -23,7 +23,7 @@ const addCart = async (req, res) => {
       'SELECT * FROM products WHERE code = $1', [product.code],
     );
 
-    product.id = productQuery.rows[0].id;
+    product.id = productQuery.rows[0] ? productQuery.rows[0].id : false;
 
     if (!product.id) {
       return res.sendStatus(404);

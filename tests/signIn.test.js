@@ -2,28 +2,33 @@ import '../src/setup.js';
 import supertest from 'supertest';
 import app from '../src/app.js';
 import connection from '../src/database.js';
+import jwt from 'jsonwebtoken';
 import {
   validUserFactory,
   invalidUserFactory,
-  wrongPasswordUserFactory,
   nonExistentUserFactory,
 } from '../src/factories/user.factory.js';
 
-beforeAll(async () => {
-  await connection.query('DELETE FROM sessions;');
-  await connection.query('DELETE FROM addresses;');
-  await connection.query('DELETE FROM phones;');
-  await connection.query('DELETE FROM users;');
-});
+let userToken = '';
+const createdUsers = [];
 
 afterAll(async () => {
+  const jwtSecret = process.env.JWT_SECRET;
+  const userId = jwt.verify(userToken, jwtSecret).id;
+
+  await connection.query(`DELETE FROM sessions WHERE user_id = $1;`, [userId]);
+  await connection.query(`DELETE FROM addresses WHERE user_id = $1;`, [userId]);
+  await connection.query(`DELETE FROM phones WHERE user_id = $1;`, [userId]);
+  await connection.query(`DELETE FROM users WHERE id = $1;`, [userId]);
   connection.end();
 });
 
 describe('POST /sign-in', () => {
   test('returns 200 with valid user and password', async () => {
     const validUser = await validUserFactory();
+    createdUsers.push(validUser);
     const result = await supertest(app).post('/sign-in').send(validUser);
+    userToken = result.body.token;
     expect(result.status).toEqual(200);
     expect(result.body).toHaveProperty('token');
     expect(result.body).toHaveProperty('name');
@@ -39,7 +44,8 @@ describe('POST /sign-in', () => {
   });
 
   test('returns 401 with existent user with wrong password', async () => {
-    const wrongPasswordUser = await wrongPasswordUserFactory();
+    const wrongPasswordUser = createdUsers[0];
+    wrongPasswordUser.password = 'wrongpassword';
     const result = await supertest(app)
       .post('/sign-in')
       .send(wrongPasswordUser);
@@ -50,12 +56,5 @@ describe('POST /sign-in', () => {
     const nonExistentUser = nonExistentUserFactory();
     const result = await supertest(app).post('/sign-in').send(nonExistentUser);
     expect(result.status).toEqual(404);
-  });
-
-  afterAll(async () => {
-    await connection.query('DELETE FROM sessions;');
-    await connection.query('DELETE FROM addresses;');
-    await connection.query('DELETE FROM phones;');
-    await connection.query('DELETE FROM users;');
   });
 });
