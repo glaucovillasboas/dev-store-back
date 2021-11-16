@@ -1,27 +1,27 @@
 /* eslint-disable comma-dangle */
 import connection from '../database.js';
 
-const getCategorieById = async (req, res) => {
+const getCategoryById = async (req, res) => {
   const { id } = req.params;
   try {
-    const categorieQuery = await connection.query(
+    const categoryQuery = await connection.query(
       `
       SELECT * FROM categories WHERE categories.id = $1
     `,
       [id]
     );
 
-    if (categorieQuery.rowCount === 0) {
+    if (categoryQuery.rowCount === 0) {
       return res.sendStatus(404);
     }
 
-    const categorieProductsQuery = await connection.query(
+    const categoryProductsQuery = await connection.query(
       `
       SELECT * FROM products WHERE products.category_id = $1
     `,
       [id]
     );
-    const products = categorieProductsQuery.rows;
+    const products = categoryProductsQuery.rows;
 
     return res.status(200).send(products);
   } catch (err) {
@@ -29,4 +29,4 @@ const getCategorieById = async (req, res) => {
   }
 };
 
-export default getCategorieById;
+export default getCategoryById;
