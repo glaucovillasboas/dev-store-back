@@ -40,7 +40,7 @@ CREATE DATABASE dev_store_dev;
 * Import DATABASE.sql to both databases (it's located at the root of the backend repository)
 ```sh
 pg_dump dev_store_test < path/to/DATABASE.sql
-pg_dump dev_store_test < path/to/DATABASE.sql
+pg_dump dev_store_dev < path/to/DATABASE.sql
 ```
 
 * Put the database information in the [.env.dev](https://github.com/glappsmobile/dev-store-back/blob/main/.env.dev) and [.env.test](https://github.com/glappsmobile/dev-store-back/blob/main/.env.test) files in the backend repository.
